@@ -50,14 +50,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const moodItem = document.createElement("li");
     moodItem.classList.add("mood-item");
     const now = new Date();
+    const isoString = now.toISOString();
     const date = now.toLocaleDateString();
     const time = now.toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
     });
-    dateArray.push(now);
+
+    dateArray.push(isoString); // Store ISO string
     calculateStreak(dateArray);
 
+    moodItem.setAttribute("data-date", isoString);
     const moodEntry = document.createElement("span");
     moodEntry.textContent = `${mood} `;
     const dateEntry = document.createElement("span");
@@ -77,19 +80,23 @@ document.addEventListener("DOMContentLoaded", () => {
       const moodItem = event.target.parentElement;
       const confirmDel = confirm("Are you sure you want to delete this entry?");
       if (confirmDel) {
+        const itemToRemove = moodItem.getAttribute("data-date");
+        const indexToRemove = dateArray.indexOf(itemToRemove);
+        if (indexToRemove !== -1) {
+          dateArray.splice(indexToRemove, 1);
+          calculateStreak(dateArray);
+        }
         moodItem.remove();
+        saveMoodHistory();
       }
-      saveMoodHistory();
     });
+
     saveMoodHistory();
   }
 
   function saveMoodHistory() {
     localStorage.setItem("moodHistory", moodList.innerHTML);
-    localStorage.setItem(
-      "moodArray",
-      JSON.stringify(dateArray.map((date) => date.toISOString()))
-    );
+    localStorage.setItem("moodArray", JSON.stringify(dateArray));
   }
 
   function loadMoodHistory() {
@@ -97,9 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const reloadDataArray = localStorage.getItem("moodArray");
     if (savedHistory && reloadDataArray) {
       moodList.innerHTML = savedHistory;
-      dateArray = JSON.parse(reloadDataArray).map(
-        (dateString) => new Date(dateString)
-      );
+      dateArray = JSON.parse(reloadDataArray);
       console.log(dateArray);
       calculateStreak(dateArray);
       const deleteBtns = document.querySelectorAll(".deleteBtn");
@@ -110,9 +115,15 @@ document.addEventListener("DOMContentLoaded", () => {
             "Are you sure you want to delete this entry?"
           );
           if (confirmDel) {
+            const itemToRemove = moodItem.getAttribute("data-date");
+            const indexToRemove = dateArray.indexOf(itemToRemove);
+            if (indexToRemove !== -1) {
+              dateArray.splice(indexToRemove, 1);
+              calculateStreak(dateArray);
+            }
             moodItem.remove();
+            saveMoodHistory();
           }
-          saveMoodHistory();
         });
       });
     }
@@ -121,16 +132,13 @@ document.addEventListener("DOMContentLoaded", () => {
   function calculateStreak(dates) {
     if (!dates || dates.length === 0) {
       streakContainer.textContent = `Current Streak: 0 days`;
-      console.log("No dates available. Streak is 0.");
       return;
     }
 
     // Ensure dates are unique and sorted
-    const uniqueDates = [...new Set(dates.map((date) => date.toISOString()))]
+    const uniqueDates = [...new Set(dates)]
       .map((dateStr) => new Date(dateStr))
       .sort((a, b) => a - b);
-
-    console.log("Unique sorted dates:", uniqueDates);
 
     let streak = 1;
     for (let i = uniqueDates.length - 1; i > 0; i--) {
@@ -141,11 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
         differenceInTime / (1000 * 3600 * 24)
       );
 
-      console.log(
-        `Current date: ${currentDate}, Previous date: ${previousDate}`
-      );
-      console.log(`Difference in days: ${differenceInDays}`);
-
       if (differenceInDays === 1) {
         streak++;
       } else {
@@ -154,7 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     streakContainer.textContent = `Current Streak: ${streak} days`;
-    console.log("Calculated streak:", streak);
   }
 
   buttonsContainer.addEventListener("mouseover", (event) => {
