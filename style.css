@@ -1,0 +1,44 @@
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  margin-bottom: 3rem;
+}
+
+.question-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 50px;
+}
+
+.tooltip {
+  position: absolute;
+  background-color: #333;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.mood-button {
+  border-radius: 5px;
+  border: none;
+  padding: 2rem;
+  font-size: 2rem;
+  background-color: grey;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mood-button:hover {
+  background-color: #1f1f1f;
+}

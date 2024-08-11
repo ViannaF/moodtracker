@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mood Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="container">
+      <h1>Mood Tracker</h1>
+      <div id="streak"></div>
+      <h2>Select your Mood:</h2>
+      <div class="question-container" id="question-container">
+        <div class="button-container" id="happy-container">
+          <button class="mood-button" type="button" id="Happy">☀️</button>
+        </div>
+        <div class="button-container" id="sad-container">
+          <button class="mood-button" type="button" id="Sad">🌧</button>
+        </div>
+        <div class="button-container" id="calm-container">
+          <button class="mood-button" type="button" id="Calm">😌</button>
+        </div>
+        <div class="button-container" id="energetic-container">
+          <button class="mood-button" type="button" id="Energetic">⚡</button>
+        </div>
+        <div class="button-container" id="angry-container">
+          <button class="mood-button" type="button" id="Angry">👿</button>
+        </div>
+        <div class="button-container" id="anxious-container">
+          <button class="mood-button" type="button" id="Anxious">😨</button>
+        </div>
+      </div>
+      <div class="mood-history">
+        <ul id="mood-history-list"></ul>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
